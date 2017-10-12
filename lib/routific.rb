@@ -34,7 +34,7 @@ class Routific
   # id: ID of location to visit
   # params: parameters for this visit
   def set_order(id, params={})
-    visits[id] = RoutificApi::Visit.new(id, params)
+    visits[id] = RoutificApi::Order.new(id, params)
   end
 
   # Sets a vehicle with the specified ID and parameters
