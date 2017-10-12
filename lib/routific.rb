@@ -1,5 +1,6 @@
 require_relative './routific/location'
 require_relative './routific/visit'
+require_relative './routific/order'
 require_relative './routific/break'
 require_relative './routific/vehicle'
 require_relative './routific/route'
@@ -29,6 +30,13 @@ class Routific
     visits[id] = RoutificApi::Visit.new(id, params)
   end
 
+  # Sets a visit for the specified location using the specified parameters
+  # id: ID of location to visit
+  # params: parameters for this visit
+  def set_order(id, params={})
+    visits[id] = RoutificApi::Visit.new(id, params)
+  end
+
   # Sets a vehicle with the specified ID and parameters
   # id: vehicle ID
   # params: parameters for this vehicle
@@ -51,6 +59,17 @@ class Routific
 
     data[:options] = options if options
     result = Util.send_request("POST", "vrp", Routific.token, data)
+    RoutificApi::Route.parse(result)
+  end
+
+  def get_pdp_route
+    data = {
+      visits: visits,
+      fleet: fleet
+    }
+
+    data[:options] = options if options
+    result = Util.send_request("POST", "pdp", Routific.token, data)
     RoutificApi::Route.parse(result)
   end
 
